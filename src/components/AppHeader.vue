@@ -5,6 +5,7 @@ import {
     CircleUserRound,
     Maximize,
 } from "lucide-vue-next";
+import Button from "./Button.vue";
 
 const showMenu = ref(false);
 const isFullscreen = ref(false);
@@ -46,8 +47,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <header
-        class="flex h-12 items-center justify-between border-b border-[#adadad] bg-[#f0f0f0] px-3 select-none font-sans text-[13px] text-black">
+    <header class="flex h-14 items-center justify-between border-b border-[#adadad] bg-zinc-300 px-3 select-none font-sans text-[13px] text-white">
         <div class="font-bold text-[#222]">
             Logo
         </div>
@@ -55,7 +55,7 @@ onBeforeUnmount(() => {
         <div class="flex items-center gap-1">
 
             <button
-                class="p-1 border border-transparent hover:border-[#3399ff] hover:bg-[#cce8ff] cursor-pointer transition-colors"
+                class="p-1 border border-transparent cursor-pointer transition-colors"
                 @click="toggleFullscreen">
                 <Maximize v-if="!isFullscreen" class="h-5 w-5 text-[#222]" />
                 <Minimize v-else class="h-5 w-5 text-[#222]" />
@@ -63,7 +63,7 @@ onBeforeUnmount(() => {
 
             <div class="relative avatar-box">
                 <button
-                    class="flex items-center justify-center p-1 border border-transparent hover:border-[#3399ff] hover:bg-[#cce8ff] cursor-pointer transition-colors"
+                    class="flex items-center justify-center p-1 border border-transparent cursor-pointer transition-colors"
                     @click="toggleMenu">
                     <CircleUserRound class="h-6 w-6 text-[#222]" />
                 </button>
@@ -86,11 +86,11 @@ onBeforeUnmount(() => {
                                 </p>
                             </div>
 
-                            <button
-                                class="text-xs border border-[#adadad] bg-[#f0f0f0] px-2 py-0.5 transition-colors cursor-pointer absolute bottom-3 right-3 hover:border-[#0078d7] hover:bg-[#e5f3ff]"
+                            <Button
+                                variant="destructive"
                                 @click="logout">
                                 <span>Logout</span>
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </Transition>

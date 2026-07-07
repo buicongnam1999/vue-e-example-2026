@@ -1,7 +1,7 @@
 <template>
     <div class="w-full flex flex-col h-full bg-[#f0f0f0] border border-[#adadad] font-sans text-[13px] text-black">
 
-        <div v-if="title" class="shrink-0 px-2 py-1.5 bg-[#e1e1e1] border-b border-[#adadad] font-semibold text-[#222]">
+        <div v-if="title" class="shrink-0 px-2 py-1.5 bg-zinc-300 border-b border-[#adadad] font-semibold text-[#222]">
             {{ title }}
         </div>
 
@@ -10,15 +10,15 @@
 
                 <thead class="sticky top-0 z-20 bg-[#f0f0f0] select-none">
                     <tr>
-                        <th class="w-12 border border-[#d3d3d3] bg-[#e1e1e1] text-center font-normal py-1 text-[#222]">
+                        <th class="w-12 border border-[#d3d3d3] bg-zinc-300 text-center font-normal py-1 text-[#222]">
                             No
                         </th>
                         <th v-for="(col, index) in columns" :key="String(col.key) + index"
-                            class="border border-[#d3d3d3] bg-[#e1e1e1] text-left px-2 py-1 font-normal text-[#222] whitespace-nowrap">
+                            class="border border-[#d3d3d3] bg-zinc-300 text-left px-2 py-1 font-normal text-[#222] whitespace-nowrap">
                             {{ col.header }}
                         </th>
                         <th v-if="hasActions"
-                            class="w-24 border border-[#d3d3d3] bg-[#e1e1e1] text-center font-normal py-1 text-[#222]">
+                            class="w-24 border border-[#d3d3d3] bg-zinc-300 text-center font-normal py-1 text-[#222]">
                             Actions
                         </th>
                     </tr>
@@ -26,28 +26,24 @@
 
                 <tbody>
                     <tr v-for="(item, rowIndex) in paginatedData" :key="item.id ?? rowIndex"
-                        class="hover:bg-[#e5f3ff] odd:bg-white even:bg-[#f9f9f9] border-b border-[#e9e9e9]">
-                        <td class="border border-[#d3d3d3] text-center text-gray-500 py-1 bg-[#f5f5f5] select-none">
+                        class="hover:bg-zinc-200 hover:cursor-pointer odd:bg-white even:bg-zinc-100 border-b border-[#e9e9e9]">
+                        <td class="border border-[#d3d3d3] text-center text-gray-500 py-2 bg-[#f5f5f5] select-none">
                             {{ (currentPage - 1) * pageSize + rowIndex + 1 }}
                         </td>
 
                         <td v-for="(col, colIndex) in columns" :key="colIndex"
-                            class="border border-[#d3d3d3] px-2 py-1 whitespace-nowrap text-[#111]">
+                            class="border border-[#d3d3d3] px-2 py-2 whitespace-nowrap text-[#111]">
                             <slot :name="`col-${String(col.key)}`" :item="item" :value="item[col.key]">
                                 {{ item[col.key] !== undefined && item[col.key] !== null ? item[col.key] : "" }}
                             </slot>
                         </td>
 
-                        <td v-if="hasActions" class="border border-[#d3d3d3] text-center py-0.5 px-1">
+                        <td v-if="hasActions" class="border border-[#d3d3d3] text-center py-0.5 px-2">
                             <div class="flex justify-center gap-1">
-                                <Button type="button"
-                                    class="px-2 h-5 bg-[#f0f0f0] border border-[#adadad] hover:border-[#0078d7] hover:bg-[#e5f3ff] text-[11px] text-[#222] transition-colors"
-                                    @click="emit('choose', item, 'edit')">
+                                <Button type="button" @click="emit('choose', item, 'edit')">
                                     Sửa
                                 </Button>
-                                <Button type="button"
-                                    class="px-2 h-5 bg-[#f0f0f0] border border-[#adadad] hover:border-red-600 hover:bg-[#fde8e8] text-[11px] text-red-600 transition-colors"
-                                    @click="emit('choose', item, 'delete')">
+                                <Button variant="destructive" type="button" @click="emit('choose', item, 'delete')">
                                     Xóa
                                 </Button>
                             </div>
@@ -67,15 +63,15 @@
         <div
             class="shrink-0 border-t border-[#adadad] bg-[#f0f0f0] px-3 py-1.5 flex items-center justify-between text-xs text-[#222] select-none">
 
-            <div>
+            <div class="text-sm">
                 Tổng số: <span class="font-semibold">{{ data.length }}</span> dòng
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 text-sm">
                 <div class="flex items-center gap-1">
                     <span>Hiển thị:</span>
                     <select v-model="pageSize" @change="currentPage = 1"
-                        class="h-5 px-0.5 bg-white border border-[#adadad] outline-none text-[12px] cursor-pointer focus:border-[#0078d7]">
+                        class="h-7 px-4 bg-white border border-[#adadad] outline-none text-[12px] cursor-pointer focus:border-[#0078d7]">
                         <option :value="10">10</option>
                         <option :value="20">20</option>
                         <option :value="50">50</option>
@@ -83,30 +79,24 @@
                 </div>
 
                 <div class="flex items-center gap-1">
-                    <Button type="button" :disabled="currentPage === 1"
-                        class="w-5 h-5 bg-[#f0f0f0] border border-[#adadad] disabled:opacity-40 disabled:pointer-events-none hover:border-[#0078d7] hover:bg-[#e5f3ff] font-bold flex items-center justify-center text-[10px]"
-                        @click="currentPage = 1">
-                        &lt;&lt;
+                    <Button type="button" :disabled="currentPage === 1" @click="currentPage = 1">
+                        <ChevronsLeft :size="14" />
                     </Button>
-                    <Button type="button" :disabled="currentPage === 1"
-                        class="w-5 h-5 bg-[#f0f0f0] border border-[#adadad] disabled:opacity-40 disabled:pointer-events-none hover:border-[#0078d7] hover:bg-[#e5f3ff] font-bold flex items-center justify-center text-[10px]"
-                        @click="currentPage--">
-                        &lt;
+                    <Button type="button" :disabled="currentPage === 1" @click="currentPage--">
+                        <ChevronRight :size="14" />
                     </Button>
 
-                    <span class="px-2 text-[12px]">
+                    <span class="px-2">
                         Trang {{ currentPage }} / {{ totalPages || 1 }}
                     </span>
 
                     <Button type="button" :disabled="currentPage === totalPages || totalPages === 0"
-                        class="w-5 h-5 bg-[#f0f0f0] border border-[#adadad] disabled:opacity-40 disabled:pointer-events-none hover:border-[#0078d7] hover:bg-[#e5f3ff] font-bold flex items-center justify-center text-[10px]"
                         @click="currentPage++">
-                        &gt;
+                        <ChevronRight :size="14" />
                     </Button>
                     <Button type="button" :disabled="currentPage === totalPages || totalPages === 0"
-                        class="w-5 h-5 bg-[#f0f0f0] border border-[#adadad] disabled:opacity-40 disabled:pointer-events-none hover:border-[#0078d7] hover:bg-[#e5f3ff] font-bold flex items-center justify-center text-[10px]"
                         @click="currentPage = totalPages">
-                        &gt;&gt;
+                        <ChevronsRight :size="14" />
                     </Button>
                 </div>
             </div>
@@ -118,6 +108,7 @@
 <script setup lang="ts" generic="TData extends Record<string, any>">
 import { ref, computed, watch } from 'vue'
 import Button from './Button.vue';
+import { ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-vue-next';
 
 export interface TableColumn {
     key: string;

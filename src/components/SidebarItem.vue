@@ -1,24 +1,36 @@
 <script setup lang="ts">
 import type { SidebarMenu } from "@/types/sidebar";
+import { ChevronDown, ChevronRight, Dot } from "lucide-vue-next";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 
-const props = defineProps<{
-    route: SidebarMenu;
-    depth?: number;
-}>();
-
+const props = withDefaults(
+    defineProps<{
+        route: SidebarMenu;
+        depth?: number;
+    }>(),
+    {
+        depth: 0,
+    }
+);
 const router = useRouter();
 const open = ref(false);
 
-const depth = props.depth ?? 0;
+const depth = computed(() => props.depth ?? 0);
+
+const itemClass = computed(() => {
+    switch (props.depth) {
+        case 0:
+            return "text-[14px] font-medium";
+        case 1:
+            return "text-[14px] font-normal";
+        default:
+            return "text-[13px] font-light";
+    }
+});
 
 const hasChildren = computed(() => {
     return !!props.route.children?.length;
-});
-
-const showIcon = computed(() => {
-    return hasChildren.value && depth > 0;
 });
 
 const toggle = () => {
@@ -40,19 +52,25 @@ const onClickIcon = (e: MouseEvent) => {
 
 <template>
     <div>
-        <div class="flex items-center gap-1 py-2 cursor-pointer hover:bg-gray-200 transition-colors text-[14px]"
-            :style="{ paddingLeft: `${depth * 16 + 12}px` }" @click="toggle">
-            <span v-if="showIcon" class="text-xs w-4 flex justify-center select-none" @click="onClickIcon">
-                {{ open ? "▼" : "▶" }}
+        <div class="flex items-center py-[5px] cursor-pointer hover:bg-gray-200 transition-colors" :class="itemClass"
+            :style="{ paddingLeft: `${12 + depth * 7}px` }" @click="toggle">
+            <span v-if="depth === 1" class="mr-1 flex h-4 w-4 items-center justify-center"
+                @click.stop="onClickIcon">
+                <ChevronDown v-if="open" :size="14" />
+                <ChevronRight v-else :size="14" />
             </span>
 
-            <span v-else-if="depth > 0" class="w-4"></span>
+            <span v-else-if="depth >= 2" class="mr-1 flex h-4 w-4 items-center justify-center">
+                <Dot :size="16" />
+            </span>
 
-            <span>{{ props.route.title }}</span>
+            <span class="leading-none" :class="itemClass">
+                {{ route.title }}
+            </span>
         </div>
 
         <div v-if="hasChildren && open">
-            <SidebarItem v-for="child in props.route.children" :key="child.path || child.name || ''" :route="child"
+            <SidebarItem v-for="child in route.children" :key="child.path || child.name || ''" :route="child"
                 :depth="depth + 1" />
         </div>
     </div>

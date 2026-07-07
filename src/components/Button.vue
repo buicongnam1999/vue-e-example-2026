@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import type { Component } from "vue";
 
 defineOptions({
     inheritAttrs: false,
@@ -20,7 +21,6 @@ const buttonVariants = cva(
         variants: {
             variant: {
                 default: [
-                    // Notepad++
                     "bg-[#f0f0f0]",
                     "border-[#adadad]",
                     "text-[#222]",
@@ -45,7 +45,7 @@ const buttonVariants = cva(
                 ],
 
                 outline: [
-                    "bg-white",
+                    "bg-zinc-200",
                     "border-[#adadad]",
                     "text-[#222]",
                     "hover:bg-[#f7f7f7]",
@@ -69,11 +69,11 @@ const buttonVariants = cva(
             },
 
             size: {
-                xs: "h-6 px-2 text-[11px]",
-                sm: "h-7 px-3 text-xs",
-                default: "h-6 px-4 text-sm",
+                xs: "h-7 px-2 text-[11px]",
+                sm: "h-8 px-3 text-xs",
+                default: "h-7 px-4 text-sm",
                 lg: "h-10 px-5 text-base",
-                icon: "h-6 w-6 p-0",
+                icon: "h-7 w-6 p-0",
             },
         },
 
@@ -93,6 +93,7 @@ const props = withDefaults(
         buttonClass?: string;
         variant?: ButtonVariants["variant"];
         size?: ButtonVariants["size"];
+        icon?: Component;
     }>(),
     {
         loading: false,
@@ -111,9 +112,13 @@ const props = withDefaults(
                 variant: props.variant,
                 size: props.size,
             }),
+            props.icon && 'pl-0',
             buttonClass
-        )
-            ">
+        )">
+            <span v-if="props.icon" class="mr-2 flex h-full items-center justify-center bg-black/10 px-1.5">
+                <component :is="props.icon" :size="14" />
+            </span>
+
             <slot />
         </button>
     </div>

@@ -2,11 +2,9 @@
     <div class="relative h-full bg-[#f5f5f5] font-sans text-[13px] text-black p-2">
         <div class="flex h-full flex-col lg:flex-row gap-2">
 
-            <aside class="w-full lg:w-80 shrink-0">
-                <Search>
-                    <slot name="filters" />
-                </Search>
-            </aside>
+            <Search>
+                <slot name="filters" />
+            </Search>
 
             <main class="flex-1 min-w-0 bg-white border border-[#adadad] p-2 flex flex-col relative">
 

@@ -11,7 +11,7 @@ import { RouterView } from 'vue-router';
     <AppHeader class="shrink-0" />
 
     <div class="flex-1 flex min-h-0 w-full">
-      <AppSidebar class="shrink-0 h-full" />
+      <AppSidebar />
 
       <div class="flex-1 flex flex-col min-h-0 min-w-0">
         <AppTabs class="shrink-0" />
