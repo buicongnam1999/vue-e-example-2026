@@ -21,7 +21,7 @@ const buttonVariants = cva(
         variants: {
             variant: {
                 default: [
-                    "bg-[#f0f0f0]",
+                    "bg-zinc-200",
                     "border-[#adadad]",
                     "text-[#222]",
                     "hover:bg-[#e6e6e6]",

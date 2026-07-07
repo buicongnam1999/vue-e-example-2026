@@ -7,7 +7,7 @@ import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <div class="h-screen w-screen flex flex-col overflow-hidden bg-[#f5f5f5]">
+  <div class="h-screen w-screen flex flex-col overflow-hidden bg-zinc-200">
     <AppHeader class="shrink-0" />
 
     <div class="flex-1 flex min-h-0 w-full">

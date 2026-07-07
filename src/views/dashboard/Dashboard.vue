@@ -57,7 +57,7 @@ const onSelect = () => {
 </script>
 
 <template>
-    <div class="h-screen overflow-y-auto">
+    <div class="h-screen overflow-y-auto px-10 bg-zinc-200">
         <div class="text-xl">
             Example Component
         </div>

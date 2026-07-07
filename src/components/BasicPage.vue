@@ -1,5 +1,5 @@
 <template>
-    <div class="relative h-full bg-[#f5f5f5] font-sans text-[13px] text-black p-2">
+    <div class="relative h-full bg-white font-sans text-black p-2">
         <div class="flex h-full flex-col lg:flex-row gap-2">
 
             <Search>

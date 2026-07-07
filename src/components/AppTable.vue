@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full flex flex-col h-full bg-[#f0f0f0] border border-[#adadad] font-sans text-[13px] text-black">
+    <div class="w-full flex flex-col h-full bg-zinc-200 border border-[#adadad] font-sans text-[13px] text-black">
 
         <div v-if="title" class="shrink-0 px-2 py-1.5 bg-zinc-300 border-b border-[#adadad] font-semibold text-[#222]">
             {{ title }}
@@ -8,7 +8,7 @@
         <div class="flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto bg-white p-[2px]">
             <table class="w-full min-w-[800px] border-collapse border border-[#d3d3d3]">
 
-                <thead class="sticky top-0 z-20 bg-[#f0f0f0] select-none">
+                <thead class="sticky top-0 z-20 bg-zinc-200 select-none text-sm">
                     <tr>
                         <th class="w-12 border border-[#d3d3d3] bg-zinc-300 text-center font-normal py-1 text-[#222]">
                             No
@@ -27,7 +27,7 @@
                 <tbody>
                     <tr v-for="(item, rowIndex) in paginatedData" :key="item.id ?? rowIndex"
                         class="hover:bg-zinc-200 hover:cursor-pointer odd:bg-white even:bg-zinc-100 border-b border-[#e9e9e9]">
-                        <td class="border border-[#d3d3d3] text-center text-gray-500 py-2 bg-[#f5f5f5] select-none">
+                        <td class="border border-[#d3d3d3] text-center text-gray-500 py-2 bg-zinc-200 select-none">
                             {{ (currentPage - 1) * pageSize + rowIndex + 1 }}
                         </td>
 
@@ -61,7 +61,7 @@
         </div>
 
         <div
-            class="shrink-0 border-t border-[#adadad] bg-[#f0f0f0] px-3 py-1.5 flex items-center justify-between text-xs text-[#222] select-none">
+            class="shrink-0 border-t border-[#adadad] bg-zinc-100 px-3 py-1.5 flex items-center justify-between text-xs text-[#222] select-none">
 
             <div class="text-sm">
                 Tổng số: <span class="font-semibold">{{ data.length }}</span> dòng

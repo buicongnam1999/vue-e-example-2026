@@ -40,16 +40,14 @@ const handleDragEnd = () => {
 </script>
 
 <template>
-    <div class="flex items-end border-b bg-[#f5f5f5] overflow-x-auto select-none">
+    <div class="flex items-end border-b bg-zinc-100 overflow-x-auto select-none pt-1">
         <div v-for="(tab, index) in tabs.tabs" :key="tab.path" draggable="true" @dragstart="handleDragStart(index)"
             @dragover="handleDragOver($event, index)" @drop="handleDrop(index)" @dragend="handleDragEnd"
             class="relative flex items-center gap-2 px-4 h-8 cursor-pointer border-r border-gray-200 transition-all"
             :class="[
-                tab.path === tabs.activePath ? 'bg-white text-black font-medium' : 'bg-[#ececec] text-gray-600 hover:bg-[#e5e5e5]',
+                tab.path === tabs.activePath ? 'bg-white text-black font-medium' : 'bg-zinc-300 text-gray-600 hover:bg-[#e5e5e5]',
                 draggedIndex === index ? 'opacity-40' : ''
             ]" @click="open(tab.path)">
-
-            <div v-if="tab.path === tabs.activePath" class="absolute top-0 left-0 right-0 h-[2px] bg-blue-500" />
 
             <span class="text-sm truncate max-w-[140px] pointer-events-none">
                 {{ tab.title }}
@@ -59,6 +57,7 @@ const handleDragEnd = () => {
                 @click.stop="close(tab.path)">
                 ✕
             </button>
+            <div v-if="tab.path === tabs.activePath" class="absolute top-0 left-0 right-0 h-[2px] bg-blue-500" />
         </div>
     </div>
 </template>
