@@ -9,6 +9,7 @@ import {
     ExternalLink
 } from "lucide-vue-next";
 import { routes } from "@/router/routes";
+import BaseConfirmModal from "./BaseConfirmModal.vue";
 
 interface MenuItem {
     label: string;
@@ -22,6 +23,8 @@ const route = useRoute();
 const showUserMenu = ref(false);
 const showHelpMenu = ref(false);
 const isFullscreen = ref(false);
+
+const showLogoutConfirm = ref(false);
 
 const headerMenus = routes[0]?.children?.filter(r => r.meta && r.meta.title) || [];
 
@@ -42,6 +45,11 @@ const toggleHelpMenu = () => {
     if (showHelpMenu.value) showUserMenu.value = false;
 };
 
+const handleRequestLogout = () => {
+    showUserMenu.value = false;
+    showLogoutConfirm.value = true;
+};
+
 const logout = () => {
     localStorage.clear();
     window.location.href = "/login";
@@ -52,7 +60,7 @@ const userMenuItems: MenuItem[] = [
     { label: "Privacy Policy", href: "#", isExternal: true },
     { label: "Service Setting", href: "#" },
     { label: "Personal Setting", href: "#" },
-    { label: "Logout", action: logout }
+    { label: "Logout", action: handleRequestLogout } // Thay đổi hành động từ logout sang kích hoạt mở modal
 ];
 
 const helpMenuItems: MenuItem[] = [
@@ -178,4 +186,7 @@ onBeforeUnmount(() => {
 
         </div>
     </header>
+
+    <BaseConfirmModal v-model="showLogoutConfirm" title="Are you sure you want to log out?" cancel-text="Cancel"
+        confirm-text="Confirm" @confirm="logout" />
 </template>

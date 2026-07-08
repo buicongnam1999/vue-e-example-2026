@@ -14,7 +14,7 @@
 
         <div class="flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto border-t border-secondary-600">
             <table class="w-full min-w-[800px] border-collapse">
-                <thead class="sticky top-0 z-20 bg-white select-none text-base font-bold">
+                <thead class="sticky top-0 z-1 bg-white select-none text-base font-bold">
                     <tr class="border-b border-[var(--color-secondary-400)]">
                         <th class="w-16 text-left py-2">
                             No
