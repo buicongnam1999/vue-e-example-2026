@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { SidebarMenu } from "@/types/sidebar";
-import { ChevronDown, ChevronRight, Dot } from "lucide-vue-next";
-import { ref, computed, watchEffect } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { ChevronDown, ChevronRight } from "lucide-vue-next";
+import { computed, ref, watchEffect } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const props = withDefaults(
     defineProps<{
@@ -106,11 +106,6 @@ const onClickIcon = (e: MouseEvent) => {
                 @click.stop="onClickIcon">
                 <ChevronDown v-if="open" :size="16" />
                 <ChevronRight v-else :size="16" />
-            </span>
-
-            <span v-else
-                class="mr-2 flex h-5 w-5 items-center justify-center text-secondary-400 group-hover:text-secondary-600">
-                <Dot :size="24" :class="isActive ? 'text-secondary-900 scale-125' : ''" />
             </span>
 
             <span class="leading-snug flex-1 truncate">
