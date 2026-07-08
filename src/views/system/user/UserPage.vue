@@ -3,9 +3,9 @@
         <BasicPage page-title="Quản Lý Người Dùng Hệ Thống" :is-loading="isLoading" @search="handleSearch"
             @reset="handleResetFilters" @export-excel="handleExportExcel">
             <template #filters>
-                <TextFeild label="Họ và tên" v-model="filterForm.fullName" />
-                <TextFeild label="Tài khoản" v-model="filterForm.username" />
-                <TextFeild label="Hộp thư" v-model="filterForm.email" />
+                <TextFeild label="Họ và tên" v-model="filterForm.fullName" place-holder="Nhập họ tên" />
+                <TextFeild label="Tài khoản" v-model="filterForm.username" place-holder="Nhập tài khoản"" />
+                <TextFeild label="Hộp thư" v-model="filterForm.email" place-holder="Nhập email" />
             </template>
 
             <template #table>

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { Search } from "lucide-vue-next";
+import Label from "./Label.vue";
+import Input from "./Input.vue";
+
 defineOptions({
     inheritAttrs: false,
 });
@@ -10,11 +14,14 @@ withDefaults(
         error?: string;
         containerClass?: string;
         inputClass?: string;
+        isSearch?: boolean;
+        placeHolder?: string;
     }>(),
     {
         required: false,
         containerClass: "",
         inputClass: "",
+        isSearch: true,
     }
 );
 
@@ -22,26 +29,19 @@ const model = defineModel<string | number>();
 </script>
 
 <template>
-    <div :class="['grid grid-cols-4 gap-2', containerClass]">
-        <div class="col-span-1">
-            <label v-if="label" class="text-sm font-medium text-gray-700">
-                {{ label }}
+    <div :class="['flex flex-col gap-1.5 font-sans', containerClass]">
 
-                <span v-if="required" class="ml-1 text-red-500">
-                    *
-                </span>
-            </label>
+        <Label v-if="label" size="base" :label="label" />
+
+        <div class="relative w-full flex items-center">
+            <Input v-model="model" v-bind="$attrs" :class="inputClass" :place-holder="placeHolder" />
+            <div v-if="isSearch"
+                class="absolute right-3 text-[var(--color-secondary-600)] pointer-events-none flex items-center justify-center">
+                <Search class="h-4 w-4" stroke-width="2" />
+            </div>
         </div>
-        <div class="col-span-3">
-            <input v-model="model" v-bind="$attrs" :class="[
-                'h-6 w-full border border-gray-400 bg-white px-1 text-[13px] leading-6 outline-none transition-colors',
-                'focus:border-gray-500',
-                'disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500',
-                error && 'border-red-500 focus:border-red-500',
-                inputClass,
-            ]" />
-        </div>
-        <p v-if="error" class="text-xs text-red-500">
+
+        <p v-if="error" class="text-xs text-red-500 mt-0.5">
             {{ error }}
         </p>
     </div>

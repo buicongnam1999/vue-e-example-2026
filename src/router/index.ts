@@ -8,6 +8,10 @@ const router = createRouter({
 })
 
 router.afterEach((to) => {
+    if (!to.name || !to.meta || !to.meta.title) {
+        return;
+    }
+
     const tabs = useTabsStore()
 
     tabs.addTab({
@@ -17,6 +21,5 @@ router.afterEach((to) => {
         closable: to.meta.closable !== false
     })
 })
-
 
 export default router

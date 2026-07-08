@@ -9,59 +9,57 @@ defineOptions({
 
 const buttonVariants = cva(
     [
-        "inline-flex items-center justify-center whitespace-nowrap",
-        "font-medium transition-all duration-150",
-        "select-none",
-        "disabled:pointer-events-none disabled:opacity-60",
-        "outline-none",
-        "cursor-pointer",
-        "border",
+        "inline-flex items-center justify-center whitespace-nowrap font-sans",
+        "font-medium transition-all duration-150 rounded-md",
+        "select-none outline-none cursor-pointer border",
+        "disabled:pointer-events-none disabled:opacity-50",
     ],
     {
         variants: {
             variant: {
                 default: [
-                    "bg-zinc-200",
-                    "border-[#adadad]",
-                    "text-[#222]",
-                    "hover:bg-[#e6e6e6]",
-                    "active:bg-[#d8d8d8]",
+                    "bg-white",
+                    "border-secondary-500",
+                    "text-secondary-800",
+                    "hover:bg-secondary-200",
+                    "active:bg-secondary-300",
                 ],
 
                 primary: [
-                    "bg-[#0078d7]",
-                    "border-[#0063b1]",
+                    "bg-primary-800",
+                    "border-primary-900",
                     "text-white",
-                    "hover:bg-[#0a84ef]",
-                    "active:bg-[#005fa3]",
+                    "hover:bg-primary-900",
+                    "active:bg-primary-800",
                 ],
 
                 destructive: [
-                    "bg-[#d13438]",
-                    "border-[#b02a2e]",
+                    "bg-red-600",
+                    "border-red-600",
                     "text-white",
-                    "hover:bg-[#e74856]",
-                    "active:bg-[#b02a2e]",
+                    "hover:bg-red-500",
+                    "active:bg-red-700",
                 ],
 
                 outline: [
-                    "bg-zinc-200",
-                    "border-[#adadad]",
-                    "text-[#222]",
-                    "hover:bg-[#f7f7f7]",
+                    "bg-white",
+                    "border-secondary-400",
+                    "text-secondary-700",
+                    "hover:bg-secondary-200",
+                    "hover:text-secondary-900",
                 ],
 
                 ghost: [
                     "bg-transparent",
                     "border-transparent",
-                    "text-[#222]",
-                    "hover:bg-[#e8e8e8]",
+                    "text-secondary-800",
+                    "hover:bg-secondary-200",
                 ],
 
                 link: [
                     "border-transparent",
                     "bg-transparent",
-                    "text-[#0066cc]",
+                    "text-primary-500",
                     "underline-offset-4",
                     "hover:underline",
                     "px-0",
@@ -69,11 +67,11 @@ const buttonVariants = cva(
             },
 
             size: {
-                xs: "h-7 px-2 text-[11px]",
+                xs: "h-7 px-2.5 text-[11px]",
                 sm: "h-8 px-3 text-xs",
-                default: "h-7 px-4 text-sm",
-                lg: "h-10 px-5 text-base",
-                icon: "h-7 w-6 p-0",
+                default: "h-9 px-4 text-sm",
+                lg: "h-11 px-6 text-base",
+                icon: "h-9 w-9 p-0",
             },
         },
 
@@ -106,17 +104,18 @@ const props = withDefaults(
 </script>
 
 <template>
-    <div :class="containerClass">
+    <div :class="['inline-block', containerClass]">
         <button v-bind="$attrs" :disabled="loading || !!$attrs.disabled" :class="cn(
             buttonVariants({
                 variant: props.variant,
                 size: props.size,
             }),
-            props.icon && 'pl-0',
+            props.icon && 'pl-0.5',
             buttonClass
         )">
-            <span v-if="props.icon" class="mr-2 flex h-full items-center justify-center bg-black/10 px-1.5">
-                <component :is="props.icon" :size="14" />
+            <span v-if="props.icon"
+                class="mr-2 flex h-full items-center justify-center border-r border-current/10 px-2 opacity-80">
+                <component :is="props.icon" :size="15" />
             </span>
 
             <slot />

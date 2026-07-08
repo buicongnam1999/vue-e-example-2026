@@ -40,24 +40,29 @@ const handleDragEnd = () => {
 </script>
 
 <template>
-    <div class="flex items-end border-b bg-zinc-100 overflow-x-auto select-none pt-1">
+    <div
+        class="flex items-end border-b border-secondary-400 bg-secondary-200 overflow-x-auto select-none pt-1 font-sans">
         <div v-for="(tab, index) in tabs.tabs" :key="tab.path" draggable="true" @dragstart="handleDragStart(index)"
             @dragover="handleDragOver($event, index)" @drop="handleDrop(index)" @dragend="handleDragEnd"
-            class="relative flex items-center gap-2 px-4 h-8 cursor-pointer border-r border-gray-200 transition-all"
+            class="relative flex items-center gap-2 px-5 h-10 cursor-pointer border-r border-secondary-400 transition-all duration-150"
             :class="[
-                tab.path === tabs.activePath ? 'bg-white text-black font-medium' : 'bg-zinc-300 text-gray-600 hover:bg-[#e5e5e5]',
+                tab.path === tabs.activePath
+                    ? 'bg-white text-primary-900 font-bold'
+                    : 'bg-secondary-300 text-secondary-700 hover:bg-secondary-100 hover:text-secondary-900',
                 draggedIndex === index ? 'opacity-40' : ''
             ]" @click="open(tab.path)">
 
-            <span class="text-sm truncate max-w-[140px] pointer-events-none">
+            <span class="text-base truncate max-w-[160px] pointer-events-none">
                 {{ tab.title }}
             </span>
 
-            <button v-if="tab.closable" class="ml-1 text-gray-500 hover:text-red-500 text-xs"
+            <button v-if="tab.closable"
+                class="ml-1 text-secondary-600 hover:text-red-500 font-medium text-base leading-none transition-colors p-0.5 rounded hover:bg-secondary-400/20"
                 @click.stop="close(tab.path)">
-                ✕
+                ×
             </button>
-            <div v-if="tab.path === tabs.activePath" class="absolute top-0 left-0 right-0 h-[2px] bg-blue-500" />
+
+            <div v-if="tab.path === tabs.activePath" class="absolute top-0 left-0 right-0 h-[3px] bg-primary-500" />
         </div>
     </div>
 </template>

@@ -24,6 +24,8 @@ export const routes: RouteRecordRaw[] = [
             // ======================
             {
                 path: 'system',
+                // BẮT BUỘC CÓ: RouterView làm trung gian để kích hoạt định tuyến con
+                component: () => import('vue-router').then(m => m.RouterView),
                 redirect: '/system/user/list',
                 meta: {
                     title: 'System',
@@ -35,11 +37,12 @@ export const routes: RouteRecordRaw[] = [
                     // ======================
                     {
                         path: 'user',
+                        // BẮT BUỘC CÓ: RouterView cho cấp tiếp theo
+                        component: () => import('vue-router').then(m => m.RouterView),
                         meta: {
                             title: 'User'
                         },
                         redirect: '/system/user/list',
-
                         children: [
                             // ======================
                             // USER LIST (LEVEL 3 PAGE)
