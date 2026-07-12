@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SegmentLoader from '@/components/SegmentLoader.vue';
+import SegmentLoader from '@/components/ui/SegmentLoader.vue';
 
 </script>
 

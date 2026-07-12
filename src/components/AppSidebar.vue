@@ -6,7 +6,7 @@ import SidebarItem from './SidebarItem.vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { buildSidebarMenus } from '@/router/sidebar.ts'
 import type { SidebarMenu } from '@/types/sidebar'
-import { ArrowLeftToLine, ChevronsRight, Star } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
@@ -46,99 +46,85 @@ const mapAbsolutePaths = (menuList: SidebarMenu[]): SidebarMenu[] => {
     })
 }
 
-const menus = computed(() => {
+const rawHierarchyMenus = computed(() => {
     const children = appRoute?.children ?? []
-
     const activeLevel1 = children.find(r => r.path !== '' && route.path.startsWith(`/${r.path}`))
 
     if (activeLevel1 && activeLevel1.children) {
         const rawMenus = buildSidebarMenus(activeLevel1.children)
-
         return mapAbsolutePaths(rawMenus)
     }
-
     return []
 })
 
-const extractFavorites = (menuList: SidebarMenu[]): SidebarMenu[] => {
-    let favs: SidebarMenu[] = []
-    for (const menu of menuList) {
-        if (menu.meta?.favorite === true) {
-            favs.push(menu)
-        }
-        if (menu.children && menu.children.length > 0) {
-            favs = favs.concat(extractFavorites(menu.children))
-        }
+const displayMenus = computed(() => {
+    if (!collapsed.value) {
+        return rawHierarchyMenus.value
     }
-    return favs
-}
 
-const favoriteMenus = computed(() => {
-    return extractFavorites(menus.value)
+    const flattened: SidebarMenu[] = []
+    rawHierarchyMenus.value.forEach(item => {
+        if (item.children && item.children.length > 0) {
+            flattened.push(...item.children)
+        } else {
+            flattened.push(item)
+        }
+    })
+    return flattened
 })
+
+const currentMenuTitle = computed(() => {
+    const children = appRoute?.children ?? []
+    const activeLevel1 = children.find(r => r.path !== '' && route.path.startsWith(`/${r.path}`))
+    return activeLevel1?.meta?.title || 'Project messages'
+})
+
+const isItemActive = (item: SidebarMenu) => {
+    return route.path === item.path || route.path.startsWith(item.path + '/')
+}
 </script>
 
 <template>
     <aside
-        class="h-full bg-secondary-300 flex flex-col select-none font-sans text-[17px] text-secondary-800 shrink-0 overflow-hidden transition-all duration-300 ease-in-out"
-        :class="collapsed ? 'w-12' : 'w-64'">
+        class="h-full bg-secondary-300 border-r border-gray-200 flex flex-col select-none font-sans text-[15px] text-gray-700 shrink-0 overflow-hidden transition-all duration-300 ease-in-out"
+        :class="collapsed ? 'w-[50px]' : 'w-[240px]'">
 
-        <template v-if="!collapsed">
-            <div class="w-full flex justify-end p-2.5 shrink-0">
-                <button @click="toggleSidebar"
-                    class="p-1.5 hover:bg-secondary-200 text-secondary-600 hover:text-secondary-900 rounded-md transition-all duration-200 cursor-pointer">
-                    <ArrowLeftToLine :size="18" />
-                </button>
+        <div class="w-full flex items-center justify-between px-4 py-4 shrink-0 h-14"
+             :class="{ 'justify-center px-0': collapsed }">
+            <span v-if="!collapsed" class="font-semibold text-gray-800 text-[16px] truncate pr-2">
+                {{ currentMenuTitle }}
+            </span>
+            
+            <button @click="toggleSidebar"
+                class="p-1 hover:bg-gray-100 text-gray-500 hover:text-gray-800 rounded transition-all duration-200 cursor-pointer"
+                :class="collapsed ? 'mx-auto' : 'ml-auto'">
+                <ArrowLeft v-if="!collapsed" :size="18" />
+                <ArrowRight v-else :size="18" />
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto min-h-0 custom-scrollbar flex flex-col"
+             :class="collapsed ? 'px-0 items-center justify-start gap-1' : 'px-3 pb-4 gap-[2px]'">
+            
+            <template v-if="displayMenus.length > 0">
+                <template v-for="menu in displayMenus" :key="menu.name || menu.path || ''">
+                    
+                    <div v-if="!collapsed" class="w-full">
+                        <SidebarItem :route="menu" />
+                    </div>
+
+                    <div v-else 
+                         class="vertical-menu-item"
+                         :class="isItemActive(menu) ? 'active' : 'inactive'">
+                        <SidebarItem :route="menu" :collapsed="true" />
+                    </div>
+
+                </template>
+            </template>
+
+            <div v-else-if="!collapsed" class="text-center pt-8 text-gray-400 text-xs italic">
+                Không có danh mục
             </div>
-
-            <div class="flex-1 overflow-y-auto min-h-0 px-2 pb-4 custom-scrollbar">
-
-                <!-- MENU YÊU THÍCH -->
-                <div v-if="favoriteMenus.length > 0" class="flex flex-col pb-4">
-                    <div
-                        class="px-2 py-1.5 text-[15px] font-bold text-secondary-700 uppercase flex items-center gap-2 tracking-wider">
-                        <Star :size="16" class="text-amber-400 fill-amber-400" />
-                        <span>Menu yêu thích</span>
-                    </div>
-
-                    <div class="flex flex-col">
-                        <template v-for="menu in favoriteMenus" :key="'fav-' + menu.path">
-                            <div class="py-0.5">
-                                <SidebarItem :route="menu" />
-                            </div>
-                        </template>
-                    </div>
-                </div>
-
-                <!-- DANH MỤC CHÍNH -->
-                <div v-if="menus.length > 0" class="flex flex-col pt-2">
-                    <div class="px-2 py-1.5 text-[15px] font-bold text-secondary-700 uppercase tracking-wider">
-                        <span>Danh mục chính</span>
-                    </div>
-
-                    <div class="flex flex-col">
-                        <template v-for="menu in menus" :key="menu.name || menu.path || ''">
-                            <div class="py-0.5">
-                                <SidebarItem :route="menu" />
-                            </div>
-                        </template>
-                    </div>
-                </div>
-
-                <div v-else class="text-center pt-8 text-secondary-500 text-sm italic">
-                    Không có danh mục con
-                </div>
-
-            </div>
-        </template>
-
-        <template v-else>
-            <div class="w-full flex flex-col items-center pt-3">
-                <button @click="toggleSidebar"
-                    class="p-1.5 hover:bg-secondary-200 text-secondary-600 hover:text-secondary-900 rounded-md transition-all duration-200 cursor-pointer">
-                    <ChevronsRight :size="18" />
-                </button>
-            </div>
-        </template>
+        </div>
     </aside>
 </template>

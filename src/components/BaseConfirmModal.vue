@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { HelpCircle } from 'lucide-vue-next'
-import Button from './Button.vue'
+import Button from './ui/Button.vue'
 
 interface Props {
     modelValue: boolean

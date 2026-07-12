@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import Button from './Button.vue'
+import Button from './ui/Button.vue'
 
 withDefaults(
     defineProps<{

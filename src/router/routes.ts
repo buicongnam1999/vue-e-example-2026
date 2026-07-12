@@ -75,7 +75,18 @@ export const routes: RouteRecordRaw[] = [
                         ]
                     }
                 ]
-            }
+            },
+            {
+                path: 'schedule',
+                name: 'Schedule',
+                component: () => import('@/views/schedule/SchedulePage.vue'),
+                meta: {
+                    title: 'Schedule',
+                    icon: 'mdi:view-dashboard',
+                    closable: false,
+                    keepAlive: true,
+                }
+            },
         ]
     }
 ]

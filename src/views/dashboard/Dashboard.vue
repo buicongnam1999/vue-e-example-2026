@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import AppTable, { type TableColumn } from '@/components/AppTable.vue';
 import BaseFormModal from '@/components/BaseFormModal.vue';
-import Button from '@/components/Button.vue';
-import Checkbox from '@/components/Checkbox.vue';
-import DatePicker from '@/components/DatePicker.vue';
-import Input from '@/components/Input.vue';
-import SegmentLoader from '@/components/SegmentLoader.vue';
-import Select from '@/components/Select.vue';
-import TextFeild from '@/components/TextFeild.vue';
+import EmptyPage from '@/components/EmptyPage.vue';
+import Badge from '@/components/ui/Badge.vue';
+import Button from '@/components/ui/Button.vue';
+import Checkbox from '@/components/ui/Checkbox.vue';
+import DatePicker from '@/components/ui/DatePicker.vue';
+import Input from '@/components/ui/Input.vue';
+import SegmentLoader from '@/components/ui/SegmentLoader.vue';
+import Select from '@/components/ui/Select.vue';
+import AppTable, { type TableColumn } from '@/components/ui/Table.vue';
 import type { OptionItem } from '@/types/option';
 import { Search } from 'lucide-vue-next';
 import { ref } from 'vue';
@@ -95,7 +96,7 @@ const resetForm = () => {
 </script>
 
 <template>
-    <div class="h-screen overflow-y-auto px-10 bg-secondary-300">
+    <EmptyPage>
         <div class="text-xl mt-2">
             Example Component
         </div>
@@ -127,7 +128,7 @@ const resetForm = () => {
                     </div>
                 </div>
                 <div class="mt-3">
-                    <div class="text-xl text-red-600 mt-3 mb-2">Checkbox</div>
+                    <div class="text-xl text-red-600 mt-3">Checkbox</div>
                     <div class="w-100 flex flex-1 flex-col gap-2 overflow-y-auto">
                         <Checkbox v-model="isAgreed" label="Ghi nhớ đăng nhập trên thiết bị này" />
                     </div>
@@ -148,6 +149,17 @@ const resetForm = () => {
                     <div class="text-xl text-red-600 mt-3 mb-2">Loading</div>
                     <div class="w-100 flex flex-1 flex-col gap-2 overflow-y-auto">
                         <SegmentLoader />
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="text-xl text-red-600 mt-2 mb-2">Badge</div>
+                    <div class="w-100 flex flex-1 flex-col gap-2 overflow-y-auto">
+                        <Badge type="danger">Badge danger</Badge>
+                        <Badge type="info">Badge info</Badge>
+                        <Badge type="primary">Badge primary</Badge>
+                        <Badge type="secondary">Badge secondary</Badge>
+                        <Badge type="success">Badge success</Badge>
+                        <Badge type="warning">Badge warning</Badge>
                     </div>
                 </div>
             </div>
@@ -221,5 +233,5 @@ const resetForm = () => {
                 </div>
             </div>
         </div>
-    </div>
+    </EmptyPage>
 </template>

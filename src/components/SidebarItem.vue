@@ -97,7 +97,7 @@ const onClickIcon = (e: MouseEvent) => {
             :class="[
                 itemClass,
                 isActive
-                    ? 'bg-secondary-200 text-secondary-900 font-bold shadow-sm'
+                    ? 'bg-secondary-200 font-bold shadow-sm text-blue-500'
                     : 'hover:bg-secondary-200/60 text-secondary-800'
             ]" :style="{ paddingLeft: `${12 + depth * 14}px` }" @click="toggle">
 

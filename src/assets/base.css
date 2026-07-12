@@ -46,3 +46,28 @@ html {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
+
+.vertical-menu-item {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.vertical-menu-item.active {
+    color: var(--color-primary-700);
+}
+
+.vertical-menu-item.inactive {
+    color: var(--color-secondary-700);
+}
+.vertical-menu-item.inactive:hover {
+    color: var(--color-secondary-900);
+    background-color: var(--color-secondary-200);
+}

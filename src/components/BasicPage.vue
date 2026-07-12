@@ -6,14 +6,17 @@
                 <slot name="filters" />
             </Search>
 
-            <main class="flex-1 min-w-0 bg-white border border-[#adadad] p-2 flex flex-col relative">
+            <main class="flex-1 min-w-0 bg-white p-2 flex flex-col relative">
 
                 <div class="shrink-0 flex justify-between items-center pb-2 border-b border-[#e9e9e9] mb-2">
                     <div class="font-semibold text-[#222] text-sm">
                         {{ pageTitle }}
                     </div>
                     <div class="flex gap-2">
-                        <Button variant="outline" class="h-7 text-emerald-700 hover:bg-emerald-50 border-[#adadad]"
+                        <Button variant="primary" class="h-7 text-emerald-700 hover:bg-emerald-50" @click="emit('add')">
+                            <Plus :size="20" /> Thêm mới
+                        </Button>
+                        <Button variant="outline" class="h-7 text-emerald-700 hover:bg-emerald-50"
                             @click="emit('export-excel')">
                             📊 Xuất Excel
                         </Button>
@@ -37,8 +40,9 @@
 </template>
 
 <script setup lang="ts">
+import { Plus } from 'lucide-vue-next';
 import Search from './Search.vue'
-import Button from './Button.vue'
+import Button from './ui/Button.vue'
 
 withDefaults(
     defineProps<{
@@ -55,5 +59,6 @@ const emit = defineEmits<{
     (e: 'search'): void
     (e: 'reset'): void
     (e: 'export-excel'): void
+    (e: 'add'): void
 }>()
 </script>

@@ -1,29 +1,38 @@
 <template>
     <div class="h-full w-full">
         <BasicPage page-title="Quản Lý Người Dùng Hệ Thống" :is-loading="isLoading" @search="handleSearch"
-            @reset="handleResetFilters" @export-excel="handleExportExcel">
+            @reset="handleResetFilters" @export-excel="handleExportExcel" @add="isModalOpen = true">
             <template #filters>
                 <TextFeild label="Họ và tên" v-model="filterForm.fullName" place-holder="Nhập họ tên" />
-                <TextFeild label="Tài khoản" v-model="filterForm.username" place-holder="Nhập tài khoản"" />
+                <TextFeild label="Tài khoản" v-model="filterForm.username" place-holder="Nhập tài khoản" />
                 <TextFeild label="Hộp thư" v-model="filterForm.email" place-holder="Nhập email" />
             </template>
 
             <template #table>
-                <AppTable :data="data?.list ?? []" :columns="tableColumns" use-can-mutation
-                    @choose="handleTableAction" />
+                <Table :data="data?.list ?? []" :columns="tableColumns" use-can-mutation @choose="handleTableAction"
+                    title="Danh Sách Người dùng" />
             </template>
         </BasicPage>
+
+        <BaseFormModal v-if="isModalOpen" title="Thêm Người Dùng" submit-text="Lưu lại" @close="isModalOpen = false"
+            @submit="handleSubmit">
+            <div class="grid grid-cols-1 gap-4">
+                <TextFeild label="Họ và tên" placeholder="Nhập tên" />
+                <TextFeild label="Tài khoản" placeholder="Nhập username" />
+            </div>
+        </BaseFormModal>
     </div>
 </template>
 
 <script setup lang="ts">
-import type { TableColumn } from '@/components/AppTable.vue'
-import AppTable from '@/components/AppTable.vue'
 import BasicPage from '@/components/BasicPage.vue'
-import TextFeild from '@/components/TextFeild.vue'
 import { useFetch } from '@/hooks/useFetch.ts'
 import type { UserItem } from '@/types/user.type'
 import { ref } from 'vue'
+import type { TableColumn } from '@/components/ui/Table.vue'
+import Table from '@/components/ui/Table.vue'
+import TextFeild from '@/components/ui/TextFeild.vue'
+import BaseFormModal from '@/components/BaseFormModal.vue'
 
 interface UserListData {
     list: UserItem[];
@@ -44,11 +53,17 @@ const filterForm = ref({
 })
 
 const apiUrl = ref('/users')
+const isModalOpen = ref(false)
 
 const { data, isLoading } = useFetch<UserListData>({
     url: apiUrl.value,
     key: ['users'],
 })
+
+const handleSubmit = () => {
+    console.log("Submit form...")
+    isModalOpen.value = false
+}
 
 const handleSearch = () => {
     const params = new URLSearchParams()
