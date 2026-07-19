@@ -9,6 +9,7 @@ import Input from '@/components/ui/Input.vue';
 import SegmentLoader from '@/components/ui/SegmentLoader.vue';
 import Select from '@/components/ui/Select.vue';
 import AppTable, { type TableColumn } from '@/components/ui/Table.vue';
+import TextField from '@/components/ui/TextField.vue';
 import type { OptionItem } from '@/types/option';
 import { Search } from 'lucide-vue-next';
 import { ref } from 'vue';
@@ -106,9 +107,9 @@ const resetForm = () => {
                 <div class="mt-3">
                     <div class="text-xl mb-2 text-red-600">Text Field</div>
                     <div class="w-100 flex flex-1 flex-col overflow-y-auto">
-                        <TextFeild label="Text" :is-search="false" />
-                        <TextFeild label="Search" place-holder="Tìm kiếm" />
-                        <TextFeild label="Number" type="number" :is-search="false" />
+                        <TextField label="Text" />
+                        <TextField label="Search" place-holder="Tìm kiếm" is-search />
+                        <TextField label="Number" type="number" />
                     </div>
                 </div>
 

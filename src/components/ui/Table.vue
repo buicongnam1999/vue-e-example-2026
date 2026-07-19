@@ -14,10 +14,10 @@
         </div>
 
         <div
-            class="flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto border border-[var(--color-secondary-300)] rounded-lg custom-scrollbar">
+            class="flex-1 min-h-0 min-w-0 overflow-x-auto overflow-y-auto border border-secondary-300 rounded-lg custom-scrollbar">
             <table class="w-full min-w-[800px] border-collapse text-left">
                 <thead
-                    class="sticky top-0 z-10 bg-[var(--color-secondary-100)] select-none text-[12px] font-semibold text-[var(--color-secondary-700)] uppercase tracking-wider border-b border-[var(--color-secondary-300)]">
+                    class="sticky top-0 z-10 bg-secondary-100 select-none text-sm font-bold text-secondary-800 uppercase tracking-wider border-b border-secondary-300">
                     <tr>
                         <th class="w-16 pl-4 py-3 text-center">
                             STT

@@ -9,6 +9,7 @@ defineOptions({
 
 withDefaults(
     defineProps<{
+        name?: string;
         label?: string;
         required?: boolean;
         error?: string;
@@ -21,7 +22,7 @@ withDefaults(
         required: false,
         containerClass: "",
         inputClass: "",
-        isSearch: true,
+        isSearch: false,
     }
 );
 
@@ -30,19 +31,15 @@ const model = defineModel<string | number>();
 
 <template>
     <div :class="['flex flex-col gap-1.5 font-sans', containerClass]">
-
         <Label v-if="label" size="base" :label="label" />
-
         <div class="relative w-full flex items-center">
-            <Input v-model="model" v-bind="$attrs" :class="inputClass" :place-holder="placeHolder" />
+            <Input v-model="model" v-bind="$attrs" :name="name" :error="error" :class="inputClass"
+                :place-holder="placeHolder" />
+
             <div v-if="isSearch"
-                class="absolute right-3 text-[var(--color-secondary-600)] pointer-events-none flex items-center justify-center">
+                class="absolute right-3 text-secondary-600 pointer-events-none flex items-center justify-center">
                 <Search class="h-4 w-4" stroke-width="2" />
             </div>
         </div>
-
-        <p v-if="error" class="text-xs text-red-500 mt-0.5">
-            {{ error }}
-        </p>
     </div>
 </template>

@@ -22,3 +22,11 @@ export interface UserItem {
     address: string | null;
     accounts: UserAccount | null;
 }
+
+export interface UserFormItem {
+    full_name: string;
+    email: string;
+    phone: string;
+    role: string;
+    lang: string;
+}

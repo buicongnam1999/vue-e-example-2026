@@ -3,9 +3,11 @@
         <BasicPage page-title="Quản Lý Người Dùng Hệ Thống" :is-loading="isLoading" @search="handleSearch"
             @reset="handleResetFilters" @export-excel="handleExportExcel" @add="isModalOpen = true">
             <template #filters>
-                <TextFeild label="Họ và tên" v-model="filterForm.fullName" place-holder="Nhập họ tên" />
-                <TextFeild label="Tài khoản" v-model="filterForm.username" place-holder="Nhập tài khoản" />
-                <TextFeild label="Hộp thư" v-model="filterForm.email" place-holder="Nhập email" />
+                <TextField label="Họ và tên" v-model="filterForm.fullName" placeholder="Nhập họ tên"
+                    :is-search="true" />
+                <TextField label="Tài khoản" v-model="filterForm.username" placeholder="Nhập tài khoản"
+                    :is-search="true" />
+                <TextField label="Hộp thư" v-model="filterForm.email" placeholder="Nhập email" :is-search="true" />
             </template>
 
             <template #table>
@@ -14,25 +16,19 @@
             </template>
         </BasicPage>
 
-        <BaseFormModal v-if="isModalOpen" title="Thêm Người Dùng" submit-text="Lưu lại" @close="isModalOpen = false"
-            @submit="handleSubmit">
-            <div class="grid grid-cols-1 gap-4">
-                <TextFeild label="Họ và tên" placeholder="Nhập tên" />
-                <TextFeild label="Tài khoản" placeholder="Nhập username" />
-            </div>
-        </BaseFormModal>
+        <UserForm :is-open="isModalOpen" @close="isModalOpen = false" @submit="handleSubmit" />
     </div>
 </template>
 
 <script setup lang="ts">
-import BasicPage from '@/components/BasicPage.vue'
 import { useFetch } from '@/hooks/useFetch.ts'
-import type { UserItem } from '@/types/user.type'
+import type { UserFormItem, UserItem } from '@/types/user.type'
 import { ref } from 'vue'
 import type { TableColumn } from '@/components/ui/Table.vue'
 import Table from '@/components/ui/Table.vue'
-import TextFeild from '@/components/ui/TextFeild.vue'
-import BaseFormModal from '@/components/BaseFormModal.vue'
+import TextField from '@/components/ui/TextField.vue'
+import BasicPage from '@/components/BasicPage.vue'
+import UserForm from './UserForm.vue'
 
 interface UserListData {
     list: UserItem[];
@@ -55,13 +51,13 @@ const filterForm = ref({
 const apiUrl = ref('/users')
 const isModalOpen = ref(false)
 
-const { data, isLoading } = useFetch<UserListData>({
+const { data, isLoading, refetch } = useFetch<UserListData>({
     url: apiUrl.value,
     key: ['users'],
 })
 
-const handleSubmit = () => {
-    console.log("Submit form...")
+const handleSubmit = (user: UserFormItem) => {
+    console.log("Dữ liệu gửi lên API chuẩn Zod:", user)
     isModalOpen.value = false
 }
 
@@ -72,7 +68,6 @@ const handleSearch = () => {
     if (filterForm.value.email) params.append('email', filterForm.value.email)
 
     const queryString = params.toString()
-
     apiUrl.value = queryString ? `/users?${queryString}` : '/users'
 }
 
@@ -92,5 +87,4 @@ const handleExportExcel = () => {
 const handleTableAction = (item: UserItem, type: 'edit' | 'delete') => {
     console.log(`Hành động ${type} trên user:`, item)
 }
-
 </script>
