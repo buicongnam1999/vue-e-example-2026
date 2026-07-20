@@ -9,82 +9,150 @@
                     :is-search="true" />
                 <TextField label="Hộp thư" v-model="filterForm.email" placeholder="Nhập email" :is-search="true" />
             </template>
-
             <template #table>
-                <Table :data="data?.list ?? []" :columns="tableColumns" use-can-mutation @choose="handleTableAction"
-                    title="Danh Sách Người dùng" />
+                <Table :data="data?.list ?? []" :columns="tableColumns" use-can-mutation title="Danh Sách Người dùng"
+                    @choose="handleTableAction" />
             </template>
         </BasicPage>
-
-        <UserForm :is-open="isModalOpen" @close="isModalOpen = false" @submit="handleSubmit" />
+        <UserForm :is-open="isModalOpen" @close="closeModal" @submit="handleSubmit" :initial-data="userSelected" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { useFetch } from '@/hooks/useFetch.ts'
-import type { UserFormItem, UserItem } from '@/types/user.type'
-import { ref } from 'vue'
-import type { TableColumn } from '@/components/ui/Table.vue'
-import Table from '@/components/ui/Table.vue'
-import TextField from '@/components/ui/TextField.vue'
-import BasicPage from '@/components/BasicPage.vue'
-import UserForm from './UserForm.vue'
+import { computed, ref } from "vue";
+
+import { useFetch } from "@/hooks/useFetch";
+
+import { convertObjectToParam } from "@/lib/utils";
+
+import type {
+    UserFormItem,
+    UserItem,
+} from "@/types/user.type";
+
+import type { TableColumn } from "@/components/ui/Table.vue";
+
+import Table from "@/components/ui/Table.vue";
+import TextField from "@/components/ui/TextField.vue";
+import BasicPage from "@/components/BasicPage.vue";
+import UserForm from "./UserForm.vue";
+import { useMutationRequest } from "@/hooks/useMutationRequest.ts";
+import { ACTION, type Action } from "@/enums/action.enum.ts";
+import { isNil } from "lodash-es";
+import { useNotification } from "@/composables/useNotification.ts";
 
 interface UserListData {
     list: UserItem[];
     total: number;
 }
 
-const tableColumns = ref<TableColumn[]>([
-    { key: 'full_name', header: 'Họ và tên' },
-    { key: 'email', header: 'Email' },
-    { key: 'phone', header: 'Số điện thoại' },
-    { key: 'status', header: 'Trạng thái' }
-])
-
+const initialFilter = {
+    fullName: "",
+    username: "",
+    email: "",
+};
 const filterForm = ref({
-    fullName: '',
-    username: '',
-    email: ''
-})
+    ...initialFilter,
+});
+const activeParams = ref("");
+const userSelected = ref<UserItem | undefined>(undefined);
+const notification = useNotification();
+const apiUrl = "/users";
+const url = computed(() =>
+    activeParams.value
+        ? `${apiUrl}?${activeParams.value}`
+        : apiUrl
+);
+const urlMutation = isNil(userSelected.value)
+    ? "users"
+    : `users/${userSelected.value.id}`;
 
-const apiUrl = ref('/users')
-const isModalOpen = ref(false)
+const method = isNil(userSelected.value)
+    ? "post"
+    : "put";
+const queryKey = computed(() => [
+    "users",
+    activeParams.value,
+]);
+
+const tableColumns = ref<TableColumn[]>([
+    {
+        key: "full_name",
+        header: "Họ và tên",
+    },
+    {
+        key: "email",
+        header: "Email",
+    },
+    {
+        key: "phone",
+        header: "Số điện thoại",
+    },
+    {
+        key: "status",
+        header: "Trạng thái",
+    },
+]);
+
+const isModalOpen = ref(false);
 
 const { data, isLoading, refetch } = useFetch<UserListData>({
-    url: apiUrl.value,
-    key: ['users'],
-})
+    url,
+    key: queryKey,
+});
 
-const handleSubmit = (user: UserFormItem) => {
-    console.log("Dữ liệu gửi lên API chuẩn Zod:", user)
+const { mutate } = useMutationRequest({
+    key: ["create-user", "update-user"],
+    url: urlMutation, method: method, options: {
+        onSuccess: () => {
+            notification.success("cập nhật người dùng thành công")
+            isModalOpen.value = false
+            refetch()
+        },
+        onError: () => {
+            notification.error("cập nhật người dùng thất bại")
+        }
+    }
+});
+
+const closeModal = () => {
     isModalOpen.value = false
+    userSelected.value = undefined
 }
 
 const handleSearch = () => {
-    const params = new URLSearchParams()
-    if (filterForm.value.fullName) params.append('full_name', filterForm.value.fullName)
-    if (filterForm.value.username) params.append('username', filterForm.value.username)
-    if (filterForm.value.email) params.append('email', filterForm.value.email)
-
-    const queryString = params.toString()
-    apiUrl.value = queryString ? `/users?${queryString}` : '/users'
-}
+    activeParams.value = convertObjectToParam(filterForm);
+};
 
 const handleResetFilters = () => {
     filterForm.value = {
-        fullName: '',
-        username: '',
-        email: ''
-    }
-    apiUrl.value = '/users'
-}
+        ...initialFilter,
+    };
+
+    activeParams.value = "";
+};
+
+const handleSubmit = (user: UserFormItem) => {
+    mutate({user})
+};
 
 const handleExportExcel = () => {
-    console.log("Xuất dữ liệu hiện tại:", data.value?.list)
-}
+    console.log(data.value?.list);
+};
 
-const handleTableAction = (item: UserItem, type: 'edit' | 'delete') => {
-    console.log(`Hành động ${type} trên user:`, item)
+const handleTableAction = (
+    item: UserItem,
+    type: Action
+) => {
+    if (type === ACTION.EDIT) {
+        isModalOpen.value = true
+        userSelected.value = item
+        return
+    }
+
+    if (type === ACTION.DELETE) {
+
+        return
+    }
 }
 </script>

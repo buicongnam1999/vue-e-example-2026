@@ -2,7 +2,7 @@
     <div class="relative h-full bg-secondary-300 font-sans text-black p-2">
         <div class="flex h-full flex-col lg:flex-row gap-2">
 
-            <Search>
+            <Search @search="emit('search')" @reset="emit('reset')">
                 <slot name="filters" />
             </Search>
 

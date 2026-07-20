@@ -11,7 +11,7 @@ export const useMutationRequest = <TData, TVariables = unknown>({
     responseType = "json",
     options,
 }: {
-    key: string[];
+    key: readonly unknown[];
     url: string;
     method: Exclude<Method, "get">;
     responseType?: ResponseType;

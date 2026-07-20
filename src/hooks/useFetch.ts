@@ -1,5 +1,13 @@
 import { api } from "@/api/axios";
-import { useQuery, type UseQueryOptions } from "@tanstack/vue-query";
+import {
+    useQuery,
+    type UseQueryOptions,
+} from "@tanstack/vue-query";
+import {
+    computed,
+    toValue,
+    type MaybeRefOrGetter,
+} from "vue";
 
 export interface DataResponse<T> {
     success: boolean;
@@ -26,31 +34,34 @@ export const useFetch = <
     key,
     options,
 }: {
-    url: string;
-    key: string[];
+    url: MaybeRefOrGetter<string>;
+    key: MaybeRefOrGetter<readonly unknown[]>;
     options?: Omit<
         UseQueryOptions<TQueryFnData, ApiError, TData>,
         "queryKey" | "queryFn"
     >;
 }) => {
-    const fetchAPI = async (): Promise<TQueryFnData> => {
-        const response = await api.get<DataResponse<TQueryFnData>>(url);
-
-        const res = response.data;
-
-        if (res.success) {
-            return res.data as TQueryFnData;
-        }
-
-        throw new ApiError(res.message || "Request failed", res.errors);
-    };
-
     return useQuery<TQueryFnData, ApiError, TData>({
-        queryKey: key,
-        queryFn: fetchAPI,
+        queryKey: computed(() => toValue(key)),
+
+        queryFn: async (): Promise<TQueryFnData> => {
+            const response = await api.get<DataResponse<TQueryFnData>>(
+                toValue(url)
+            );
+
+            const res = response.data;
+
+            if (res.success) {
+                return res.data as TQueryFnData;
+            }
+
+            throw new ApiError(
+                res.message || "Request failed",
+                res.errors
+            );
+        },
 
         refetchOnWindowFocus: false,
-        enabled: true,
 
         ...options,
     });

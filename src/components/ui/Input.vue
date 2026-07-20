@@ -12,7 +12,7 @@ const props = withDefaults(
         error?: string;
         containerClass?: string;
         inputClass?: string;
-        placeHolder?: string;
+        placeholder?: string;
     }>(),
     {
         containerClass: "",
@@ -63,7 +63,7 @@ const computedError = computed(() => props.error || errorMessage.value);
                     'disabled:cursor-not-allowed disabled:text-secondary-500',
                     inputClass,
                 ]" 
-                :placeholder="placeHolder" 
+                :placeholder="placeholder" 
             />
         </div>
 

@@ -2,12 +2,10 @@
     <div :class="['grid grid-cols-4 gap-2 items-center', containerClass]" ref="selectRef">
 
         <div class="col-span-1">
-            <!-- ĐÃ SỬA: Truyền prop :required xuống Label -->
             <Label :label="label" v-if="label" size="base" :required="required" />
         </div>
 
         <div class="col-span-3 relative font-sans text-base text-[var(--color-primary-900)]">
-
             <div @click="isOpen = !isOpen" :class="cn(
                 'flex items-center justify-between bg-[var(--color-secondary-50)] min-h-[36px] py-1 px-3 text-base rounded border transition-all',
                 'cursor-pointer outline-none select-none',

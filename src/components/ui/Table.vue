@@ -49,11 +49,11 @@
 
                         <td v-if="hasActions" class="py-2 text-center pr-4">
                             <div class="flex justify-center gap-1.5">
-                                <Button type="button" @click.stop="emit('choose', item, 'edit')"
+                                <Button type="button" @click.stop="emit('choose', item, ACTION.EDIT)"
                                     class="h-7 px-2.5 text-[12px] font-medium bg-white border border-[var(--color-secondary-300)] text-[var(--color-secondary-700)] hover:bg-[var(--color-secondary-100)] hover:text-[var(--color-primary-900)] rounded-md transition-all shadow-2xs">
                                     Sửa
                                 </Button>
-                                <Button variant="destructive" type="button" @click.stop="emit('choose', item, 'delete')"
+                                <Button variant="destructive" type="button" @click.stop="emit('choose', item, ACTION.DELETE)"
                                     class="h-7 px-2.5 text-[12px] font-medium bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 hover:border-red-300 rounded-md transition-all shadow-2xs">
                                     Xóa
                                 </Button>
@@ -135,6 +135,7 @@
 import { ref, computed, watch } from 'vue'
 import Button from './Button.vue';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-vue-next';
+import { ACTION, type Action } from '@/enums/action.enum';
 
 export interface TableColumn {
     key: string;
@@ -154,8 +155,8 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-    (e: 'choose', data: TData, type: 'edit' | 'delete'): void
-}>()
+    (e: 'choose', data: TData, type: Action): void
+}>();
 
 const hasActions = computed(() => props.useCanMutation)
 

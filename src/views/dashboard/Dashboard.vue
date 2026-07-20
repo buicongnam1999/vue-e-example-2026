@@ -10,6 +10,7 @@ import SegmentLoader from '@/components/ui/SegmentLoader.vue';
 import Select from '@/components/ui/Select.vue';
 import AppTable, { type TableColumn } from '@/components/ui/Table.vue';
 import TextField from '@/components/ui/TextField.vue';
+import { useNotification } from '@/composables/useNotification';
 import type { OptionItem } from '@/types/option';
 import { Search } from 'lucide-vue-next';
 import { ref } from 'vue';
@@ -52,16 +53,14 @@ const langnOptions = ref<OptionItem[]>([
     { label: 'Python Script Host', value: 'python_script' },
     { label: 'XML Tools Pack', value: 'xml_tools' }
 ])
+const notification = useNotification();
 const langOption = ref<string[]>(['json_viewer'])
-
 const isAgreed = ref(false);
 const selectedFruits = ref([]);
 const selectedPackage = ref<string | null>('basic');
 const singleDate = ref('2026-07-08');
 const dateRange = ref(['2026-07-08', '2026-07-08']);
-
 const isOpenModal = ref(false)
-
 const formData = ref({
     name: '',
     timeZone: '',
@@ -94,6 +93,10 @@ const resetForm = () => {
         code: ''
     }
 }
+
+const showNotification = () => {
+    notification.info("Người dùng")
+}
 </script>
 
 <template>
@@ -108,7 +111,7 @@ const resetForm = () => {
                     <div class="text-xl mb-2 text-red-600">Text Field</div>
                     <div class="w-100 flex flex-1 flex-col overflow-y-auto">
                         <TextField label="Text" />
-                        <TextField label="Search" place-holder="Tìm kiếm" is-search />
+                        <TextField label="Search" placeholder="Tìm kiếm" is-search />
                         <TextField label="Number" type="number" />
                     </div>
                 </div>
@@ -227,10 +230,18 @@ const resetForm = () => {
                                 <Label label="Project Code" size="base" :required="true" />
                             </div>
                             <div class="col-span-3">
-                                <Input v-model="formData.code" placeHolder="Please enter Project Code." />
+                                <Input v-model="formData.code" placeholder="Please enter Project Code." />
                             </div>
                         </div>
                     </BaseFormModal>
+                </div>
+            </div>
+            <div>
+                <div class="mt-3">
+                    <div class="text-xl mb-2 text-red-600">Notification</div>
+                    <div class="w-100 flex flex-1 flex-col overflow-y-auto">
+                        <Button @click="showNotification" >Info</Button>
+                    </div>
                 </div>
             </div>
         </div>
